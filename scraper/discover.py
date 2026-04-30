@@ -18,6 +18,8 @@ def parse_autor_page(html: str) -> list[dict]:
     the live site and inspect logged HTML to verify these selectors are correct.
     Adjust if kleinezeitung.at uses different markup.
     """
+    # NOTE: Only the first loaded page is parsed. If /autor uses infinite scroll or
+    # pagination, discover_authors must add scroll simulation before calling this function.
     soup = BeautifulSoup(html, "lxml")
     authors: list[dict] = []
     seen: set[str] = set()

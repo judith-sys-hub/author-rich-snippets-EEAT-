@@ -14,7 +14,10 @@ def load_session() -> list | None:
 
 
 def save_session(cookies: list) -> None:
-    SESSION_PATH.write_text(json.dumps(cookies, indent=2), encoding="utf-8")
+    import os
+    fd = os.open(SESSION_PATH, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write(json.dumps(cookies, indent=2))
 
 
 def _is_logged_in(context: BrowserContext) -> bool:

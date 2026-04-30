@@ -49,6 +49,7 @@ def enrich_author(author_data: dict, delay: float = 3.0) -> dict:
     name = author_data["profile"]["name"]
     enrichment = author_data.setdefault("enrichment", {})
     existing_verified = [a for a in enrichment.get("awards", []) if a.get("verified")]
+    # Unverified awards are always replaced on re-enrichment; verified awards are preserved.
     new_awards: list[dict] = []
     sources: list[str] = []
 
@@ -94,6 +95,6 @@ def enrich_author(author_data: dict, delay: float = 3.0) -> dict:
 
     enrichment["awards"] = existing_verified + new_awards
     enrichment["social_links"] = social
-    enrichment["enrichment_sources"] = list(set(sources))
+    enrichment["enrichment_sources"] = sorted(set(sources))
     author_data["enrichment"] = enrichment
     return author_data
