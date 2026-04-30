@@ -6,3 +6,9 @@ __pycache__/
 *.pyo
 .pytest_cache/
 data/authors/*.json
+venv/
+.venv/
+env/
+.env.*
+.DS_Store
+Thumbs.db
