@@ -2,6 +2,7 @@ import json
 import re
 
 import anthropic
+from json_repair import repair_json
 
 MODEL = "claude-sonnet-4-6"
 
@@ -16,13 +17,13 @@ SYSTEM_PROMPT = (
     'Antworte ausschließlich als JSON:\n{"bio": "...", "beats": ["...", "..."]}'
 )
 
-_FENCE_RE = re.compile(r'^```[a-z]*\s*\n?', re.MULTILINE)
+_FENCE_RE = re.compile(r"^```[a-z]*\s*\n?", re.MULTILINE)
 
 
 def _strip_fences(text: str) -> str:
     text = text.strip()
     text = _FENCE_RE.sub("", text)
-    text = re.sub(r'\n?```\s*$', "", text)
+    text = re.sub(r"\n?```\s*$", "", text)
     return text.strip()
 
 
@@ -72,10 +73,9 @@ def generate_bio(
     try:
         result = json.loads(raw)
     except json.JSONDecodeError:
-        m = re.search(r"\{.*\}", raw, re.DOTALL)
-        if m:
-            result = json.loads(m.group())
-        else:
+        try:
+            result = json.loads(repair_json(raw))
+        except Exception:
             raise ValueError(f"Could not parse JSON from response: {raw[:200]}")
 
     author_data["profile"]["bio_generated"] = result.get("bio")
