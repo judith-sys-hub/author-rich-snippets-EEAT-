@@ -1,5 +1,4 @@
-import json
-import os
+﻿import json
 import re
 
 import anthropic
@@ -7,14 +6,14 @@ import anthropic
 MODEL = "claude-sonnet-4-6"
 
 SYSTEM_PROMPT = (
-    "Du bist ein erfahrener Biografieautor für österreichische Qualitätsjournalisten.\n"
+    "Du bist ein erfahrener Biografieautor fÃ¼r Ã¶sterreichische QualitÃ¤tsjournalisten.\n"
     "Deine Aufgabe: Schreibe eine E-E-A-T-optimierte Autorenbiografie auf Deutsch.\n\n"
     "Regeln:\n"
-    "- 80–120 Wörter, dritte Person, professionell aber persönlich\n"
+    "- 80â€“120 WÃ¶rter, dritte Person, professionell aber persÃ¶nlich\n"
     "- Nenne Fachgebiet/Beat explizit, basierend auf den Artikeln\n"
-    "- Verwende ausschließlich Fakten aus den bereitgestellten Daten\n"
+    "- Verwende ausschlieÃŸlich Fakten aus den bereitgestellten Daten\n"
     "- Keine Erfindungen, keine nicht belegten Aussagen\n\n"
-    'Antworte ausschließlich als JSON:\n{"bio": "...", "beats": ["...", "..."]}'
+    'Antworte ausschlieÃŸlich als JSON:\n{"bio": "...", "beats": ["...", "..."]}'
 )
 
 
@@ -41,7 +40,7 @@ def build_prompt(author_data: dict) -> str:
         if a.get("title")
     ]
     if awards:
-        lines.append("\nErwähnungen in Fachmedien:")
+        lines.append("\nErwÃ¤hnungen in Fachmedien:")
         for title in awards[:3]:
             lines.append(f"- {title}")
 
@@ -74,3 +73,4 @@ def generate_bio(
     author_data["expertise"]["beats"] = result.get("beats", [])
     author_data["expertise"]["derived_from_articles"] = True
     return author_data
+

@@ -1,4 +1,4 @@
-import pytest
+﻿import pytest
 from unittest.mock import MagicMock
 from scraper.generate import build_prompt, generate_bio, SYSTEM_PROMPT
 
@@ -9,12 +9,12 @@ def full_author():
         "profile": {
             "name": "Anna-Maria Aichholzer",
             "title": "Redakteurin News & Social Media",
-            "bio_existing": "Gebürtige Salzburgerin und seit 2016 im Journalismus.",
+            "bio_existing": "GebÃ¼rtige Salzburgerin und seit 2016 im Journalismus.",
             "bio_generated": None,
         },
         "expertise": {"beats": [], "derived_from_articles": False},
         "articles": [
-            {"title": f"Artikel {i}", "section": "Graz", "published_at": f"2025-0{(i % 9) + 1}-01"}
+            {"title": f"Artikel {i}", "section": "Graz", "published_at": f"2025-{i + 1:02d}-01"}
             for i in range(12)
         ],
         "enrichment": {
@@ -42,7 +42,7 @@ def test_build_prompt_includes_title(full_author):
 
 
 def test_build_prompt_includes_existing_bio(full_author):
-    assert "Gebürtige Salzburgerin" in build_prompt(full_author)
+    assert "GebÃ¼rtige Salzburgerin" in build_prompt(full_author)
 
 
 def test_build_prompt_omits_bio_section_when_null(minimal_author):
@@ -67,3 +67,4 @@ def test_build_prompt_includes_award(full_author):
 
 def test_build_prompt_works_with_minimal_author(minimal_author):
     assert "Max Muster" in build_prompt(minimal_author)
+
