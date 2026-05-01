@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -90,6 +91,42 @@ def run_enrich(dry_run: bool, limit: int | None) -> None:
             print(f"[enrich] FEHLER: {slug} — {exc}", file=sys.stderr)
 
 
+def run_generate(dry_run: bool, limit: int | None) -> None:
+    import time
+    from scraper.generate import SYSTEM_PROMPT, generate_bio
+    from scraper.state import get_authors_by_stage, update_stage
+
+    candidates = list(get_authors_by_stage("enriched"))
+    if limit:
+        candidates = candidates[:limit]
+    print(f"[generate] Verarbeite {len(candidates)} Autoren ...")
+
+    if dry_run:
+        for row in candidates:
+            print(f"[generate] Würde generieren: {row['slug']}")
+        return
+
+    import anthropic
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    delay = float(os.environ.get("SCRAPE_DELAY_SECONDS", "2"))
+
+    for row in candidates:
+        slug = row["slug"]
+        out_path = DATA_DIR / f"{slug}.json"
+        try:
+            data = json.loads(out_path.read_text(encoding="utf-8"))
+            data = generate_bio(data, client, SYSTEM_PROMPT)
+            out_path.write_text(
+                json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+            update_stage(slug, "generated")
+            print(f"[generate] OK: {slug}")
+        except Exception as exc:
+            update_stage(slug, "failed", error=str(exc))
+            print(f"[generate] FEHLER: {slug} — {exc}", file=sys.stderr)
+        time.sleep(delay)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Kleine Zeitung Autorenprofil-Pipeline"
@@ -98,7 +135,7 @@ def main() -> None:
                         help="Aktionen loggen ohne Dateien zu schreiben")
     parser.add_argument("--limit", type=int, default=None,
                         help="Nur N Autoren verarbeiten")
-    parser.add_argument("--stage", choices=["discover", "scrape", "enrich"],
+    parser.add_argument("--stage", choices=["discover", "scrape", "enrich", "generate"],
                         default=None, help="Nur eine Stage ausführen")
     args = parser.parse_args()
 
@@ -119,6 +156,8 @@ def main() -> None:
             run_scrape(context, args.dry_run, args.limit)
         if args.stage in (None, "enrich"):
             run_enrich(args.dry_run, args.limit)
+        if args.stage in (None, "generate"):
+            run_generate(args.dry_run, args.limit)
 
 
 if __name__ == "__main__":
