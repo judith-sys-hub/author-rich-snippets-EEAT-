@@ -68,3 +68,48 @@ def test_build_prompt_includes_award(full_author):
 def test_build_prompt_works_with_minimal_author(minimal_author):
     assert "Max Muster" in build_prompt(minimal_author)
 
+
+def _mock_client(response_text: str) -> MagicMock:
+    client = MagicMock()
+    msg = MagicMock()
+    msg.content = [MagicMock(text=response_text)]
+    client.messages.create.return_value = msg
+    return client
+
+
+def test_generate_bio_sets_bio_generated(full_author):
+    client = _mock_client('{"bio": "Eine erfahrene Journalistin.", "beats": ["Social Media"]}')
+    result = generate_bio(full_author, client, SYSTEM_PROMPT)
+    assert result["profile"]["bio_generated"] == "Eine erfahrene Journalistin."
+
+
+def test_generate_bio_sets_beats(full_author):
+    client = _mock_client('{"bio": "Eine erfahrene Journalistin.", "beats": ["Social Media", "Graz"]}')
+    result = generate_bio(full_author, client, SYSTEM_PROMPT)
+    assert result["expertise"]["beats"] == ["Social Media", "Graz"]
+
+
+def test_generate_bio_sets_derived_from_articles(full_author):
+    client = _mock_client('{"bio": "Journalistin.", "beats": ["Graz"]}')
+    result = generate_bio(full_author, client, SYSTEM_PROMPT)
+    assert result["expertise"]["derived_from_articles"] is True
+
+
+def test_generate_bio_raises_on_unparseable_response(full_author):
+    client = _mock_client("Das ist kein gültiges JSON und enthält keine geschweifte Klammer")
+    with pytest.raises(ValueError, match="Could not parse JSON"):
+        generate_bio(full_author, client, SYSTEM_PROMPT)
+
+
+def test_generate_bio_recovers_json_embedded_in_text(full_author):
+    client = _mock_client('Hier ist die Antwort: {"bio": "Journalistin.", "beats": ["Graz"]} Ende.')
+    result = generate_bio(full_author, client, SYSTEM_PROMPT)
+    assert result["profile"]["bio_generated"] == "Journalistin."
+
+
+def test_generate_bio_uses_cache_control(full_author):
+    client = _mock_client('{"bio": "Journalistin.", "beats": ["Graz"]}')
+    generate_bio(full_author, client, SYSTEM_PROMPT)
+    call_kwargs = client.messages.create.call_args.kwargs
+    system_blocks = call_kwargs["system"]
+    assert system_blocks[0]["cache_control"] == {"type": "ephemeral"}
