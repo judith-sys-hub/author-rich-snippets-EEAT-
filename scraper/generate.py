@@ -16,6 +16,15 @@ SYSTEM_PROMPT = (
     'Antworte ausschließlich als JSON:\n{"bio": "...", "beats": ["...", "..."]}'
 )
 
+_FENCE_RE = re.compile(r'^```[a-z]*\s*\n?', re.MULTILINE)
+
+
+def _strip_fences(text: str) -> str:
+    text = text.strip()
+    text = _FENCE_RE.sub("", text)
+    text = re.sub(r'\n?```\s*$', "", text)
+    return text.strip()
+
 
 def build_prompt(author_data: dict) -> str:
     profile = author_data["profile"]
@@ -59,7 +68,7 @@ def generate_bio(
         system=[{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": prompt}],
     )
-    raw = message.content[0].text
+    raw = _strip_fences(message.content[0].text)
     try:
         result = json.loads(raw)
     except json.JSONDecodeError:

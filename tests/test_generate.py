@@ -113,3 +113,9 @@ def test_generate_bio_uses_cache_control(full_author):
     call_kwargs = client.messages.create.call_args.kwargs
     system_blocks = call_kwargs["system"]
     assert system_blocks[0]["cache_control"] == {"type": "ephemeral"}
+
+def test_generate_bio_handles_markdown_fences(full_author):
+    fenced = '```json\n{"bio": "Journalistin.", "beats": ["Graz"]}\n```'
+    client = _mock_client(fenced)
+    result = generate_bio(full_author, client, SYSTEM_PROMPT)
+    assert result["profile"]["bio_generated"] == "Journalistin."
