@@ -1,4 +1,4 @@
-﻿import pytest
+import pytest
 from unittest.mock import MagicMock
 from scraper.generate import build_prompt, generate_bio, SYSTEM_PROMPT
 
@@ -9,7 +9,7 @@ def full_author():
         "profile": {
             "name": "Anna-Maria Aichholzer",
             "title": "Redakteurin News & Social Media",
-            "bio_existing": "GebÃ¼rtige Salzburgerin und seit 2016 im Journalismus.",
+            "bio_existing": "Gebürtige Salzburgerin und seit 2016 im Journalismus.",
             "bio_generated": None,
         },
         "expertise": {"beats": [], "derived_from_articles": False},
@@ -42,7 +42,7 @@ def test_build_prompt_includes_title(full_author):
 
 
 def test_build_prompt_includes_existing_bio(full_author):
-    assert "GebÃ¼rtige Salzburgerin" in build_prompt(full_author)
+    assert "Gebürtige Salzburgerin" in build_prompt(full_author)
 
 
 def test_build_prompt_omits_bio_section_when_null(minimal_author):
@@ -96,7 +96,7 @@ def test_generate_bio_sets_derived_from_articles(full_author):
 
 
 def test_generate_bio_raises_on_unparseable_response(full_author):
-    client = _mock_client("Das ist kein gültiges JSON und enthält keine geschweifte Klammer")
+    client = _mock_client("Das ist kein gueltiges JSON und enthaelt keine geschweifte Klammer")
     with pytest.raises(ValueError, match="Could not parse JSON"):
         generate_bio(full_author, client, SYSTEM_PROMPT)
 
