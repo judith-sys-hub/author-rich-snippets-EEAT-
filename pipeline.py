@@ -34,7 +34,12 @@ def run_scrape(context, dry_run: bool, limit: int | None) -> None:
 
     for row in candidates:
         slug = row["slug"]
-        profile_url = f"https://www.kleinezeitung.at/autor/{slug}"
+        author_id = row["author_id"]
+        profile_url = (
+            f"https://www.kleinezeitung.at/autor/{author_id}/{slug}"
+            if author_id else
+            f"https://www.kleinezeitung.at/autor/{slug}"
+        )
         if dry_run:
             print(f"[scrape] Würde scrapen: {slug}")
             continue
@@ -104,7 +109,7 @@ def main() -> None:
 
     with sync_playwright() as playwright:
         context = None
-        if needs_browser and not args.dry_run:
+        if needs_browser:
             from scraper.auth import get_authenticated_context
             context = get_authenticated_context(playwright)
 

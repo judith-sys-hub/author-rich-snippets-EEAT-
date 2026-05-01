@@ -15,20 +15,26 @@ def init_db() -> None:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS authors (
                 slug        TEXT PRIMARY KEY,
+                author_id   TEXT,
                 name        TEXT,
                 stage       TEXT DEFAULT 'discovered',
                 last_scraped TEXT,
                 error       TEXT
             )
         """)
+        # migration: add author_id to existing databases
+        try:
+            conn.execute("ALTER TABLE authors ADD COLUMN author_id TEXT")
+        except Exception:
+            pass
 
 
-def upsert_author(slug: str, name: str) -> None:
+def upsert_author(slug: str, name: str, author_id: str | None = None) -> None:
     with get_connection() as conn:
         conn.execute(
-            "INSERT INTO authors (slug, name, stage) VALUES (?, ?, 'discovered') "
+            "INSERT INTO authors (slug, author_id, name, stage) VALUES (?, ?, ?, 'discovered') "
             "ON CONFLICT(slug) DO NOTHING",
-            (slug, name),
+            (slug, author_id, name),
         )
 
 

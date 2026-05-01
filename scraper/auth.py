@@ -30,19 +30,19 @@ def _is_logged_in(context: BrowserContext) -> bool:
 
 
 def _do_login(context: BrowserContext) -> None:
-    """
-    IMPORTANT: Verify the CSS selectors below against the live login form at
-    KLZ_LOGIN_URL before the first production run. Adjust if the form uses
-    different input names or button selectors.
-    """
+    # kleinezeitung.at login uses a Piano/TinyPass iframe modal (id.tinypass.com)
     page = context.new_page()
     try:
         page.goto(os.environ["KLZ_LOGIN_URL"], timeout=15_000)
-        page.fill("input[type='email'], input[name='username']",
-                  os.environ["KLZ_USERNAME"])
-        page.fill("input[type='password']", os.environ["KLZ_PASSWORD"])
-        page.click("button[type='submit'], input[type='submit']")
-        page.wait_for_url(lambda url: "login" not in url, timeout=15_000)
+        login_btn = page.get_by_text("EINLOGGEN")
+        if login_btn.is_visible():
+            login_btn.click()
+        page.wait_for_selector("iframe[src*='tinypass']", timeout=15_000)
+        frame = page.frame_locator("iframe[src*='tinypass']")
+        frame.locator("input#email").fill(os.environ["KLZ_USERNAME"])
+        frame.locator("input#password").fill(os.environ["KLZ_PASSWORD"])
+        frame.locator("button[type='submit']").click()
+        page.wait_for_load_state("networkidle", timeout=15_000)
     finally:
         page.close()
 
