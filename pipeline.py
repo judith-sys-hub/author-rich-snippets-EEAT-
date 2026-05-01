@@ -1,7 +1,8 @@
-import argparse
+﻿import argparse
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -92,7 +93,6 @@ def run_enrich(dry_run: bool, limit: int | None) -> None:
 
 
 def run_generate(dry_run: bool, limit: int | None) -> None:
-    import time
     from scraper.generate import SYSTEM_PROMPT, generate_bio
     from scraper.state import get_authors_by_stage, update_stage
 
@@ -107,7 +107,11 @@ def run_generate(dry_run: bool, limit: int | None) -> None:
         return
 
     import anthropic
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        print("[generate] FEHLER: ANTHROPIC_API_KEY ist nicht gesetzt.", file=sys.stderr)
+        sys.exit(1)
+    client = anthropic.Anthropic(api_key=api_key)
     delay = float(os.environ.get("SCRAPE_DELAY_SECONDS", "2"))
 
     for row in candidates:
