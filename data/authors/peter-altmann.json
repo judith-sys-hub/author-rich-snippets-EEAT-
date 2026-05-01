@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "slug": "peter-altmann",
+    "last_scraped": "2026-05-01T11:46:47.460317+00:00",
+    "scrape_version": 1
+  },
+  "profile": {
+    "name": "Peter Altmann",
+    "title": "Sport",
+    "department": null,
+    "bio_existing": "Von 2000 bis 2003 „Deutschland-Legionär“ bei sport1.de. Nach der Österreich-Rückkehr über zwei Jahrzehnte bei laola1.at, dort Mitglied der Chefredaktion. 2024 folgte der Ruf in die steirische Heimat zur Kleinen Zeitung.",
+    "profile_url": "https://www.kleinezeitung.at/autor/1202/peter-altmann",
+    "photo_url": "https://img.kleinezeitung.at/public/incoming/ernvw7-Peter-Altmann/alternates/WEBP_SQUARE_200/Peter%20Altmann",
+    "bio_generated": "Peter Altmann ist Sportredakteur bei der Kleinen Zeitung, wo er seit 2024 über den steirischen Fußball berichtet. Seine journalistische Laufbahn begann der gebürtige Steirer im Jahr 2000 bei sport1.de in Deutschland, ehe er nach Österreich zurückkehrte und über zwei Jahrzehnte bei laola1.at tätig war – zuletzt als Mitglied der Chefredaktion. Mit dieser umfangreichen Erfahrung im österreichischen und internationalen Sportjournalismus widmet er sich bei der Kleinen Zeitung schwerpunktmäßig dem GAK sowie dem SK Sturm Graz und verfolgt dabei auch das internationale Bühnengeschehen."
+  },
+  "expertise": {
+    "beats": [
+      "Österreichischer Fußball",
+      "GAK",
+      "SK Sturm Graz",
+      "Europa League",
+      "Fußball-WM"
+    ],
+    "derived_from_articles": true
+  },
+  "articles": [
+    {
+      "url": "https://www.kleinezeitung.at/artikel/21089532/daniel-maderner-zurueck-im-gak-training-habe-nicht-fuenf-wochen-lang",
+      "title": "Daniel Maderner zurück im GAK-Training: „Habe nicht fünf Wochen lang nichts gemacht“",
+      "published_at": "2026-04-29",
+      "section": "Angespannte Stürmersituation",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20810460/beim-gak-gipfel-waren-alle-beteiligten-sehr-gespraechig",
+      "title": "Beim GAK-Gipfel waren alle Beteiligten sehr gesprächig",
+      "published_at": "2026-04-28",
+      "section": "Klare Worte",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20786987/vor-dem-100er-zeigt-sich-gak-trainer-ferdinand-feldhofer-zuversichtlich",
+      "title": "Vor dem „100er“ zeigt sich GAK-Trainer Ferdinand Feldhofer zuversichtlich",
+      "published_at": "2026-04-21",
+      "section": "Ried - GAK",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20525320/luca-weinhandls-vorgaenger-als-karriere-fruehstarter",
+      "title": "Luca Weinhandls Vorgänger als Karriere-Frühstarter",
+      "published_at": "2026-02-01",
+      "section": "SK Sturm",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20524516/ab-21-uhr-live-der-sk-sturm-gegen-brann-bergen",
+      "title": "Der SK Sturm besiegt Brann Bergen dank Otar Kiteishvili ",
+      "published_at": "2026-01-29",
+      "section": "Europa League",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20524712/gak-comeback-erste-minuten-von-jacob-italiano-bereits-gegen-die-austria",
+      "title": "GAK-Comeback: Erste Minuten von Jacob Italiano bereits gegen die Austria?",
+      "published_at": "2026-01-28",
+      "section": "Zurück im Training",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20512920/mukhran-bagrationi-georgischer-ritter-beim-gak-im-aufwind",
+      "title": "Mukhran Bagrationi: „Georgischer Ritter“ beim GAK im Aufwind",
+      "published_at": "2026-01-26",
+      "section": "GAK",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20505365/soll-die-fussball-wm-in-den-usa-boykottiert-werden",
+      "title": "Soll die Fußball-WM in den USA boykottiert werden? ",
+      "published_at": "2026-01-25",
+      "section": "Pro und Kontra",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20512668/gak-neuzugang-leon-klassen-david-alaba-war-mein-vorbild",
+      "title": "GAK-Neuzugang Leon Klassen: „David Alaba war mein Vorbild“",
+      "published_at": "2026-01-25",
+      "section": "GAK",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20512322/klarer-gak-sieg-gegen-voitsberg-haetten-noch-mehr-tore-erzielen-koennen",
+      "title": "Klarer GAK-Sieg gegen Voitsberg: „Hätten noch mehr Tore erzielen können“",
+      "published_at": "2026-01-24",
+      "section": "Testspiel",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20510279/das-sagt-michael-parensen-zu-einer-verpflichtung-von-paul-koller",
+      "title": "Das sagt Michael Parensen zu einer Verpflichtung von Paul Koller",
+      "published_at": "2026-01-23",
+      "section": "SK Sturm",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20510214/sturm-bekommt-problemfelder-aufgezeigt-jetzt-gibt-es-kein-verstecken",
+      "title": "Sturm bekommt Problemfelder aufgezeigt: Jetzt gibt es kein Verstecken mehr",
+      "published_at": "2026-01-23",
+      "section": "Feyenoord - Sturm",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20506371/viel-lob-fuer-luca-weinhandl-nach-sturm-debuet-eine-der-positiven",
+      "title": "Viel Lob für Luca Weinhandl nach Sturm-Debüt: „Eine der positiven Erscheinungen“",
+      "published_at": "2026-01-22",
+      "section": "Feyenoord - Sturm",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20505771/ingolitsch-setzt-zeichen-fuer-eine-geschlossenheit",
+      "title": "Ingolitsch setzt Zeichen für eine Geschlossenheit",
+      "published_at": "2026-01-22",
+      "section": "Feyenoord - Sturm",
+      "word_count": null
+    },
+    {
+      "url": "https://www.kleinezeitung.at/artikel/20502711/ab-1845-uhr-live-feyenoord-rotterdam-gegen-den-sk-sturm",
+      "title": "0:3! SK Sturm bei Feyenoord Rotterdam ohne echte Chance",
+      "published_at": "2026-01-22",
+      "section": "Europa League",
+      "word_count": null
+    }
+  ],
+  "enrichment": {
+    "awards": [],
+    "social_links": {
+      "linkedin": null,
+      "bluesky": null,
+      "twitter": null,
+      "instagram": null
+    },
+    "wikipedia_url": null,
+    "enrichment_sources": []
+  }
+}
