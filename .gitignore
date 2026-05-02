@@ -6,6 +6,7 @@ __pycache__/
 *.pyo
 .pytest_cache/
 data/authors/*.json
+richsnippet/
 venv/
 .venv/
 env/
@@ -13,3 +14,4 @@ env/
 !.env.example
 .DS_Store
 Thumbs.db
+review/author_review.csv

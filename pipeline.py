@@ -13,6 +13,9 @@ load_dotenv()
 DATA_DIR = Path(__file__).parent / "data" / "authors"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
+RICHSNIPPET_DIR = Path(__file__).parent / "richsnippet"
+RICHSNIPPET_DIR.mkdir(parents=True, exist_ok=True)
+
 
 def run_discover(context, dry_run: bool, limit: int | None) -> None:
     from scraper.discover import discover_authors
@@ -131,6 +134,35 @@ def run_generate(dry_run: bool, limit: int | None) -> None:
         time.sleep(delay)
 
 
+def run_render(dry_run: bool, limit: int | None) -> None:
+    from scraper.render import render_jsonld
+    from scraper.state import get_authors_by_stage, update_stage
+
+    candidates = list(get_authors_by_stage("generated"))
+    if limit:
+        candidates = candidates[:limit]
+    print(f"[render] Verarbeite {len(candidates)} Autoren ...")
+
+    for row in candidates:
+        slug = row["slug"]
+        out_path = DATA_DIR / f"{slug}.json"
+        richsnippet_path = RICHSNIPPET_DIR / f"{slug}.json"
+        if dry_run:
+            print(f"[render] Würde rendern: {slug}")
+            continue
+        try:
+            data = json.loads(out_path.read_text(encoding="utf-8"))
+            jsonld = render_jsonld(data)
+            richsnippet_path.write_text(
+                json.dumps(jsonld, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+            update_stage(slug, "rendered")
+            print(f"[render] OK: {slug}")
+        except Exception as exc:
+            update_stage(slug, "failed", error=str(exc))
+            print(f"[render] FEHLER: {slug} — {exc}", file=sys.stderr)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Kleine Zeitung Autorenprofil-Pipeline"
@@ -139,7 +171,7 @@ def main() -> None:
                         help="Aktionen loggen ohne Dateien zu schreiben")
     parser.add_argument("--limit", type=int, default=None,
                         help="Nur N Autoren verarbeiten")
-    parser.add_argument("--stage", choices=["discover", "scrape", "enrich", "generate"],
+    parser.add_argument("--stage", choices=["discover", "scrape", "enrich", "generate", "render"],
                         default=None, help="Nur eine Stage ausführen")
     args = parser.parse_args()
 
@@ -162,6 +194,8 @@ def main() -> None:
             run_enrich(args.dry_run, args.limit)
         if args.stage in (None, "generate"):
             run_generate(args.dry_run, args.limit)
+        if args.stage in (None, "render"):
+            run_render(args.dry_run, args.limit)
 
 
 if __name__ == "__main__":
