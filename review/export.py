@@ -73,15 +73,15 @@ def write_xlsx(rows: list[dict], xlsx_path: Path) -> None:
     cf_range = f"C3:C{last_row}"
     ws.conditional_formatting.add(
         cf_range,
-        CellIsRule(operator="equal", formula=['"approved"'], fill=PatternFill("solid", fgColor="C8E6C9")),
+        CellIsRule(operator="equal", formula=['"approved"'], fill=PatternFill("solid", fgColor="C8E6C9"), font=Font(color="1B5E20")),
     )
     ws.conditional_formatting.add(
         cf_range,
-        CellIsRule(operator="equal", formula=['"flagged"'], fill=PatternFill("solid", fgColor="FFCDD2")),
+        CellIsRule(operator="equal", formula=['"flagged"'], fill=PatternFill("solid", fgColor="FFCDD2"), font=Font(color="B71C1C")),
     )
     ws.conditional_formatting.add(
         cf_range,
-        CellIsRule(operator="equal", formula=['"pending"'], fill=PatternFill("solid", fgColor="FFF9C4")),
+        CellIsRule(operator="equal", formula=['"pending"'], fill=PatternFill("solid", fgColor="FFF9C4"), font=Font(color="F57F17")),
     )
 
     # Data validation dropdown on column C
