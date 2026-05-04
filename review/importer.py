@@ -1,20 +1,40 @@
-import csv
 import json
 from pathlib import Path
 
-from review import BEAT_COLS
+import openpyxl
 
 DATA_DIR = Path(__file__).parent.parent / "data" / "authors"
 RICHSNIPPET_DIR = Path(__file__).parent.parent / "richsnippet"
-CSV_PATH = Path(__file__).parent / "author_review.csv"
+XLSX_PATH = Path(__file__).parent / "author_review.xlsx"
 
 
-def parse_beats(row: dict) -> list[str]:
-    return [row[col].strip() for col in BEAT_COLS if row.get(col, "").strip()]
+def parse_beats_from_themen(themen: str) -> list[str]:
+    if not themen or not themen.strip():
+        return []
+    return [b.strip() for b in themen.split(";") if b.strip()]
+
+
+def read_xlsx(xlsx_path: Path) -> list[dict]:
+    wb = openpyxl.load_workbook(xlsx_path, data_only=True)
+    ws = wb.active
+    rows = []
+    for row_vals in ws.iter_rows(min_row=3, values_only=True):
+        padded = list(row_vals) + [None] * 5
+        slug, name, status, bio, themen = padded[:5]
+        if not slug:
+            continue
+        rows.append({
+            "slug": str(slug).strip(),
+            "name": str(name or ""),
+            "status": str(status or "").strip().lower(),
+            "bio": str(bio or "").strip(),
+            "themen": str(themen or "").strip(),
+        })
+    return rows
 
 
 def import_authors(
-    csv_path: Path = CSV_PATH,
+    xlsx_path: Path = XLSX_PATH,
     data_dir: Path = DATA_DIR,
     richsnippet_dir: Path = RICHSNIPPET_DIR,
 ) -> dict:
@@ -24,12 +44,11 @@ def import_authors(
     counts = {"approved": 0, "flagged": 0, "pending": 0}
     flagged = []
 
-    with csv_path.open(encoding="utf-8", newline="") as f:
-        rows = list(csv.DictReader(f))
+    rows = read_xlsx(xlsx_path)
 
     for row in rows:
-        status = row["status"].strip().lower()
-        slug = row["slug"].strip()
+        status = row["status"]
+        slug = row["slug"]
 
         if status == "flagged":
             counts["flagged"] += 1
@@ -46,8 +65,8 @@ def import_authors(
             continue
         author_data = json.loads(json_path.read_text(encoding="utf-8"))
 
-        new_bio = row["bio"].strip()
-        new_beats = parse_beats(row)
+        new_bio = row["bio"]
+        new_beats = parse_beats_from_themen(row["themen"])
         current_bio = author_data["profile"].get("bio_generated") or ""
         current_beats = (author_data.get("expertise") or {}).get("beats") or []
 

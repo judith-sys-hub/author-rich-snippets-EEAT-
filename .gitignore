@@ -14,5 +14,5 @@ env/
 !.env.example
 .DS_Store
 Thumbs.db
-review/author_review.csv
+review/author_review.xlsx
 .superpowers/
