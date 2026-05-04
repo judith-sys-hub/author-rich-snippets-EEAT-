@@ -120,7 +120,11 @@ After `render`, the pipeline produces 231 author profiles ready for editorial si
 python -m review.export
 ```
 
-Creates `review/author_review.xlsx` (gitignored). Open it in **Google Sheets** or Excel.
+Creates `review/author_review.xlsx` (gitignored).
+
+**Share it with your colleagues** via Google Drive, SharePoint, or email — whichever your team uses. The file opens directly in Google Sheets (File → Import is not needed; just upload and open). Editors do not need to install anything.
+
+> The file is gitignored and never committed to the repository, so sharing it manually is always required.
 
 The file has:
 - **Row 1** — live progress summary with COUNTIF formulas (updates as editors type)
@@ -234,7 +238,32 @@ The pipeline was built for Kleine Zeitung but the architecture is generic. To ad
 4. **Render** (`scraper/render.py`) — update the `_PUBLISHER` block with your organisation's details
 5. **Config** (`.env`) — update `KLZ_BASE_URL` and `KLZ_LOGIN_URL` with your domain
 
-The bio generation prompt (in `scraper/generate.py`) is in German — update it to your language and tone of voice.
+**Language:** The bio generation prompt in `scraper/generate.py` produces bios in **German** and is tuned to the tone and style of Austrian print journalism. If you are adapting this for a non-German-speaking outlet, you will need to rewrite the prompt (look for the `build_prompt()` function). The rest of the pipeline — scraping, enrichment, JSON-LD output, review workflow — is language-independent.
+
+---
+
+## Feasibility for Other News Websites
+
+**What transfers immediately (no changes needed):**
+- The state machine, pipeline orchestrator, and incremental re-run logic
+- The bio generation stage (just update the prompt language)
+- The Schema.org JSON-LD output format
+- The entire editorial review workflow (Excel export → Google Sheets → import)
+
+**What needs CSS selector work (1–2 days per site):**
+- `scraper/discover.py` — finding author profile URLs depends on how your site structures its author listing pages. You need to inspect the HTML and update the selectors.
+- `scraper/articles.py` — article metadata (title, date, section) is extracted from HTML attributes specific to the Kleine Zeitung CMS (CUE by Stibo). Other CMSes will have different markup.
+
+**What may require significant effort:**
+
+| Requirement | Notes |
+|---|---|
+| Dedicated author pages | The pipeline assumes each author has a stable `/autor/{id}/{slug}` profile URL. Sites that don't have author pages (byline-only) need a different discovery approach. |
+| Login-protected content | The scraper handles Piano/TinyPass (common in DACH media). Other paywalls (Piano.io, Plenigo, Leaky Paywall) will need their own auth flow in `scraper/auth.py`. |
+| JavaScript-heavy pages | Playwright handles JS rendering, so most modern sites work. However, sites with aggressive bot detection (Cloudflare, DataDome) may block headless browsers. |
+| Article date format | The 2025–2026 filter in `scraper/articles.py` assumes ISO date strings. Other date formats need a parser update. |
+
+**Realistic estimate:** For a standard DACH news site with author pages and Piano authentication, adapting the scraper takes roughly **one day of HTML inspection + selector updates**. For a site with a different CMS or no dedicated author pages, budget a full week.
 
 ---
 
