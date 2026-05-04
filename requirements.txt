@@ -8,3 +8,4 @@ anthropic>=0.25
 
 json-repair>=0.30
 json-repair>=0.30
+openpyxl>=3.1
