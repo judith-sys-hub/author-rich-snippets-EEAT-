@@ -3,7 +3,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import openpyxl
-import pytest
 
 from review.export import build_row, export_authors, write_xlsx
 
