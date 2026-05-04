@@ -86,9 +86,10 @@ def import_authors(
                 print(f"[import] OK (aktualisiert): {slug}")
             else:
                 print(f"[import] OK (unveraendert): {slug}")
-            update_stage(slug, "reviewed")
         except Exception as exc:
             print(f"[import] FEHLER: {slug} – {exc}")
+            continue
+        update_stage(slug, "reviewed")
 
     for slug in flagged:
         print(f"[import] FLAGGED (uebersprungen): {slug}")
