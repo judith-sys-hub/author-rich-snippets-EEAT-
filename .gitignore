@@ -16,3 +16,8 @@ env/
 Thumbs.db
 review/author_review.xlsx
 .superpowers/
+
+# socialcheck
+socialcheck/social_session.json
+socialcheck/social_private_report.*
+socialcheck/.browser_profile/
